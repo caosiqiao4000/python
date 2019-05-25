@@ -1,6 +1,7 @@
 # encoding:utf-8
 import datetime
 
+import xlrd as xlrd
 from jqdatasdk import *  # 平台给的包，务必加载，地址：https://github.com/JoinQuant/jqdatasdk/archive/master.zip
 from jqDataFinance.jqdata.china.common.jqDataLogin import login
 from jqDataFinance.jqdata.china.common.handJqDataToFile import *
@@ -21,17 +22,21 @@ def getDataByCode(stockCode, stockName,monthNumBar = 800,numBar=100000):
     ).filter(
         valuation.code == stockCodeMarket
     ))
-    if df['market_cap'][0]<120:
-        # 取出总市值
-        print(stockCodeMarket,stockName, " 总市值 ", df['market_cap'][0])
-        return
-    # print(i, str(list).replace(".0", ""), list2 ,d_industry.get(stockCodeMarket).get("zjw"))
-    getDataByCodeToFile(stockCodeMarket,stockName,path="D:\\\\ideaWorkspace\\python\\jqJson\\")
+    # print(stockCodeMarket,stockName)
+    try:
+        if df['market_cap'][0]<120:
+            # 取出总市值
+            print(stockCodeMarket,stockName, " 总市值 ", df['market_cap'][0])
+            return
+        # print(i, str(list).replace(".0", ""), list2 ,d_industry.get(stockCodeMarket).get("zjw"))
+        getDataByCodeToFile(stockCodeMarket,stockName,path="D:\\\\ideaWorkspace\\python\\jqJson\\")
+    except:
+        pass
 
 # workbook = xlrd.open_workbook("C:\\\\Users\\Administrator\\Desktop\\20190507stock_base_info.xlsx")
-workbook = xlrd.open_workbook("C:\\\\Users\\Administrator\\Desktop\\20190507stock_base_info.xlsx")
+workbook = xlrd.open_workbook("C:\\\\Users\\Administrator\\Desktop\\20190522stock_base_info.xlsx")
 sheet_names = workbook.sheet_by_index(0)
-for i in range(1, 52):
+for i in range(1, 35):
     list = sheet_names.cell_value(i, 1);
     list2 = sheet_names.cell_value(i, 0);
     newStockCode = str(list).replace(".0", "")
