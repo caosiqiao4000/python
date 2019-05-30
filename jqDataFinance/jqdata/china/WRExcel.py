@@ -1,5 +1,4 @@
 import xlrd
-import xlwt
 
 def get_values(excel_name):
 

@@ -11,8 +11,8 @@ def getDataByCodeToFile(stockCodeMarket, stockName, monthNumBar=800, numBar=1000
     df = get_bars(stockCodeMarket, numBar, unit='1d', fields=['date', 'open', 'high', 'low', 'close'],
                   include_now=False, fq_ref_date=datenow,
                   end_dt=datenow)
-    if df.size < 4000:
-        print(stockCodeMarket, stockName, "数量少于 4000", df.size)
+    if df.size < 1700:
+        print(stockCodeMarket, stockName, "数量少于 1700", df.size)
         return
     print(stockCodeMarket + " - " + stockName + " ------------ " + datenow)
     print(df.head(2))
