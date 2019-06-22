@@ -3,8 +3,10 @@ import datetime
 
 import xlrd as xlrd
 from jqdatasdk import *  # 平台给的包，务必加载，地址：https://github.com/JoinQuant/jqdatasdk/archive/master.zip
-from jqDataFinance.jqdata.china.common.jqDataLogin import login
-from jqDataFinance.jqdata.china.common.handJqDataToFile import *
+# from jqDataFinance.jqdata.china.common.jqDataLogin import login
+# from jqDataFinance.jqdata.china.common.handJqDataToFile import *
+from jqdata.china.common.jqDataLogin import login
+from jqdata.china.common.handJqDataToFile import *
 # from scrapy.spider import BaseSpider
 
 
@@ -34,11 +36,13 @@ def getDataByCode(stockCode, stockName,monthNumBar = 800,numBar=100000):
         pass
 
 # workbook = xlrd.open_workbook("C:\\\\Users\\Administrator\\Desktop\\20190507stock_base_info.xlsx")
-workbook = xlrd.open_workbook("C:\\\\Users\\Administrator\\Desktop\\20190522stock_base_info.xlsx")
+workbook = xlrd.open_workbook("..\\..\\..\\file\\20190522stock_base_info.xlsx")
 sheet_names = workbook.sheet_by_index(0)
+# for i in range(1, 35):
 for i in range(1, 35):
     list = sheet_names.cell_value(i, 1);
     list2 = sheet_names.cell_value(i, 0);
     newStockCode = str(list).replace(".0", "")
     getDataByCode(newStockCode, list2)
 
+# getDataByCode("000016.XSHG", "上证50")

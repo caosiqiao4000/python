@@ -1,9 +1,8 @@
 # encoding:utf-8
 from jqdatasdk import *  # 平台给的包，务必加载，地址：https://github.com/JoinQuant/jqdatasdk/archive/master.zip
 import csv
-from jqDataFinance.jqdata.china.common.jqDataLogin import login
-from jqDataFinance.jqdata.china.common.handJqDataToFile import *
-import json,pickle
+from jqdata.china.common.jqDataLogin import login
+from jqdata.china.common.handJqDataToFile import *
 
 login()
 
@@ -16,7 +15,7 @@ json_path=r'D:\\\\ideaWorkspace\\python\\jqJson\\'
 修改合约交易代码 本次合约修改将强麦合约交易代码一并修改, 强麦合约交易 代码由 WS 改为 WH(QM 合约自动废止), 为其英文 WHEAT 的前两个 字母
 '''
 def readCsv():
-    csv_file = csv.reader(open(r'..\..\file\聚宽期货合约代码表201905.csv', "r", encoding="utf-8"))
+    csv_file = csv.reader(open(r'..\..\..\file\聚宽期货合约代码表201905.csv', "r", encoding="utf-8"))
     # // print(csv_file)
     for stu in csv_file:
         if len(stu) > 0:
@@ -24,7 +23,11 @@ def readCsv():
             bb_stu = aa_stu.split("\t")
             # print(len(bb_stu),bb_stu)
             if bb_stu[0].__contains__("合约"):
-                if bb_stu[0].__contains__("强麦合约WS"):
+                if bb_stu[1].__contains__("WS9999.XZCE"):
+                    # print(bb_stu[0], bb_stu[1])
+                    continue
+                if bb_stu[1].__contains__("TC9999.XZCE"):
+                    # print(bb_stu[0], bb_stu[1])
                     continue
                 # print(len(bb_stu), bb_stu)
                 # test2(bb_stu[1])
@@ -68,8 +71,12 @@ def readCsv():
 #     print(df0.size)
 
 # 增加单个看好合约
-# def addOne(futurnCode, futurnName):
-#     getDataByCodeToFile(futurnCode, futurnName, path=r'D:\\\\ideaWorkspace\\python\\jqJson\\')
+def addOne(futurnCode, futurnName):
+    getDataByCodeToFile(futurnCode, futurnName, path=r'D:\\\\ideaWorkspace\\python\\jqJson\\')
+
+##添加 上证50ETF的短线数据
+def add_shang_hai_50(futurnCode, futurnName):
+    get_day_data_by_code_to_file(futurnCode, futurnName, path=r'D:\\\\ideaWorkspace\\python\\jqJson\\')
 
 
 # if __name__ == '__main__':
@@ -83,3 +90,6 @@ readCsv()
 # test2("AP9999.XZCE")  # 苹果合约
 # test2("AP8888.XZCE")
 # activeFuturn_query("ZC")
+# addOne("B1907.XDCE", "豆二合约")
+# addOne("000016.XSHG", "上证50")
+# add_shang_hai_50("000016.XSHG", "上证50")
