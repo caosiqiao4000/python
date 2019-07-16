@@ -6,33 +6,33 @@ from jqdata.china.common.handJqDataToFile import *
 
 login()
 
-json_path=r'D:\\\\ideaWorkspace\\python\\jqJson\\'
-
+json_path = r'D:\\\\ideaWorkspace\\python\\jqJson\\'
 
 # auth('18680538805', 'zzzz00000000')  # 依次输入账号、密码，链接到平台数据库
 '''
 动力煤是郑交所品种。原先交易单位200吨每手;简称动煤,代码“TC"。从1605合约开始改为每手100吨。简称郑煤,代码“ZC"
 修改合约交易代码 本次合约修改将强麦合约交易代码一并修改, 强麦合约交易 代码由 WS 改为 WH(QM 合约自动废止), 为其英文 WHEAT 的前两个 字母
+甲醇标准合约内容将会进行更改：
+由现在的50吨/手，降低到10吨/手。代码由ME改为MA，甲醇新合约规则从1506合约开始使用。及1506以前的合约都是me，50吨/手；1506及以后的都是MA，10吨/手
 '''
+
+
 def readCsv():
     csv_file = csv.reader(open(r'..\..\..\file\聚宽期货合约代码表201905.csv', "r", encoding="utf-8"))
     # // print(csv_file)
+    tuple_no_exist = ("WS9999.XZCE", "TC9999.XZCE", "WT9999.XZCE", "RO9999.XZCE", "GN9999.XZCE","ER9999.XZCE","ME9999.XZCE")
+    # tuple_no_exist
     for stu in csv_file:
         if len(stu) > 0:
             aa_stu = str(stu[0])
             bb_stu = aa_stu.split("\t")
             # print(len(bb_stu),bb_stu)
             if bb_stu[0].__contains__("合约"):
-                if bb_stu[1].__contains__("WS9999.XZCE"):
-                    # print(bb_stu[0], bb_stu[1])
-                    continue
-                if bb_stu[1].__contains__("TC9999.XZCE"):
-                    # print(bb_stu[0], bb_stu[1])
+                if bb_stu[2] in tuple_no_exist:
                     continue
                 # print(len(bb_stu), bb_stu)
                 # test2(bb_stu[1])
-                getDataByCodeToFile(bb_stu[1], bb_stu[0], path=json_path)
-
+                getDataByCodeToFile(bb_stu[2], bb_stu[0], path=json_path)
 
 # def test1():
 #     # 抓取期货数据  郑商所XZCE AP 苹果  大商所XDCE A豆一 C 玉米 玉米淀粉合约	CS
@@ -74,22 +74,19 @@ def readCsv():
 def addOne(futurnCode, futurnName):
     getDataByCodeToFile(futurnCode, futurnName, path=r'D:\\\\ideaWorkspace\\python\\jqJson\\')
 
-##添加 上证50ETF的短线数据
-def add_shang_hai_50(futurnCode, futurnName):
-    get_day_data_by_code_to_file(futurnCode, futurnName, path=r'D:\\\\ideaWorkspace\\python\\jqJson\\')
-
 
 # if __name__ == '__main__':
-    # addOne("B1907.XDCE", "豆二合约")
-readCsv()
-
-# test1()
-
-# test2("C9999.XDCE")
-# test2("C8888.XDCE")
-# test2("AP9999.XZCE")  # 苹果合约
-# test2("AP8888.XZCE")
-# activeFuturn_query("ZC")
 # addOne("B1907.XDCE", "豆二合约")
-# addOne("000016.XSHG", "上证50")
-# add_shang_hai_50("000016.XSHG", "上证50")
+def start_fetch():
+    readCsv()
+    # test1()
+
+    # test2("C9999.XDCE")
+    # test2("C8888.XDCE")
+    # test2("AP9999.XZCE")  # 苹果合约
+    # test2("AP8888.XZCE")
+    # activeFuturn_query("ZC")
+    # addOne("B1907.XDCE", "豆二合约")
+    # addOne("000016.XSHG", "上证50")
+    # add_shang_hai_50("000016.XSHG", "上证50")
+start_fetch()

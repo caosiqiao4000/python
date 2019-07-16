@@ -7,8 +7,6 @@ from hmmlearn import hmm
 import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
-import sys
-sys.path.append('D:\\Program Files\\JoinQuant-Desktop-Py3\\Python\\')
 
 n = 6  # 6个隐藏状态
 
