@@ -1,10 +1,12 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
+# 给本地数据库删除一些不要的数据和给股票查询出相应的行业代码
 import pymysql
 import datetime
 from jqdatasdk import *  # 平台给的包，务必加载，地址：https://github.com/JoinQuant/jqdatasdk/archive/master.zip
-from jqDataFinance.jqdata.china.common.jqDataLogin import login
+# from jqDataFinance.jqdata.china.common.jqDataLogin import login
+from jqdatadir.china.common.jqDataLogin import login
 
 login()
 datenow = datetime.datetime.now().strftime('%Y-%m-%d');

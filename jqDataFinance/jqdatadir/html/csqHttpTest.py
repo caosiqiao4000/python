@@ -4,7 +4,7 @@ import io
 import asyncio
 import aiohttp
 import json, re
-from jqdata.html.requestHtml import  main
+from jqdatadir.html.requestHtml import  main
 
 import requests
 

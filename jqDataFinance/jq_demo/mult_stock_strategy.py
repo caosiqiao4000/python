@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
 
 # 导入聚宽函数库
-import jqdata
+import jqdatadir
 
 def initialize(context):
     # 初始化此策略

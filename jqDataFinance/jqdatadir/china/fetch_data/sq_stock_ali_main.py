@@ -1,9 +1,9 @@
 # encoding:utf-8
 
 ## 只要import就会执行
-# import jqdata.china.fetch_data.FetchChinaMarketByJq as fetch_china_market
-# import jqdata.china.fetch_data.pingAnFutrueDataByJq as fetch_pingan_futrue
-import jqdata.china.fetch_data.tomcat_insurment_life_sort as bar_life_analyze
+# import jqdatadir.china.fetch_data.FetchChinaMarketByJq as fetch_china_market
+# import jqdatadir.china.fetch_data.pingAnFutrueDataByJq as fetch_pingan_futrue
+import jqdatadir.china.fetch_data.tomcat_insurment_life_sort as bar_life_analyze
 
 class Csq_stock_dream():
     def __init__(self):

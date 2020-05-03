@@ -1,4 +1,4 @@
-# from jqdata import macro
+# from jqdatadir import macro
 from jqdatasdk import *
 import numpy as np
 import pandas as pd
@@ -33,26 +33,26 @@ df2 = pd.DataFrame({'A': 5.,
 # df2["add"] = (df2['D']+df2['G'])/df2['D']
 # df2.loc[:,"H"] = df2.loc[:,'G']
 print(df2)
-bar_path = r'D:\\ideaWorkspace\python\jqJson'
-path_excel = '%s\\series\\csq_test_analyze.xlsx' % (bar_path)
-with pd.ExcelWriter(path_excel) as writer:  # doctest: +SKIP
-    startrow_excel = 0
-    for x in range(0, 4):
-        df3 = df2.copy()
-        df4 = df2.copy()
-        df4 = df4.drop('C', axis=1)
-        df4.loc[:, "H"] = df2.loc[:, 'G'] + 1
-        print("---------- df4 \n", df4)
-
-        sheet_name_e = 'data_df2_%s' % x
-        print(x, "----", sheet_name_e)
-        df2.to_excel(writer, sheet_name=sheet_name_e)
-        startrow_excel += len(df2) + 2
-        df3.to_excel(writer, sheet_name=sheet_name_e, startrow=startrow_excel)
-        startrow_excel += len(df3) + 2
-        df4.to_excel(writer, sheet_name=sheet_name_e, startrow=startrow_excel)
-        startrow_excel += len(df4) + 2
-        writer.save()
+# bar_path = r'D:\\ideaWorkspace\python\jqJson'
+# path_excel = '%s\\series\\csq_test_analyze.xlsx' % (bar_path)
+# with pd.ExcelWriter(path_excel) as writer:  # doctest: +SKIP
+#     startrow_excel = 0
+#     for x in range(0, 4):
+#         df3 = df2.copy()
+#         df4 = df2.copy()
+#         df4 = df4.drop('C', axis=1)
+#         df4.loc[:, "H"] = df2.loc[:, 'G'] + 1
+#         print("---------- df4 \n", df4)
+#
+#         sheet_name_e = 'data_df2_%s' % x
+#         print(x, "----", sheet_name_e)
+#         df2.to_excel(writer, sheet_name=sheet_name_e)
+#         startrow_excel += len(df2) + 2
+#         df3.to_excel(writer, sheet_name=sheet_name_e, startrow=startrow_excel)
+#         startrow_excel += len(df3) + 2
+#         df4.to_excel(writer, sheet_name=sheet_name_e, startrow=startrow_excel)
+#         startrow_excel += len(df4) + 2
+#         writer.save()
 
 # df1=pd.DataFrame({'key':['a','b','c'],'data1':[1,2,3]})
 # df2=pd.DataFrame({'key':['e','d','f'],'data2':[4,5,6]})

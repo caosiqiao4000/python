@@ -21,7 +21,7 @@
 import requests
 import demjson
 import os
-from jqdata.sqhmm.plot_hmm_sq import *
+from jqdatadir.sqhmm.plot_hmm_sq import *
 
 # import openpyxl
 

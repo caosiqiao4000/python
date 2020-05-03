@@ -1,0 +1,26 @@
+201908
+UserAccount 四个子类  是帐户的相关信息类
+UserFuturesAccount
+
+空头开创成功返回
+
+订单已提交: FuturesOrder(entrust_id=1566905551 security=TA1709.XZCE mode=OrderAmount<_amount=126> style=MarketOrderStyle<_price_type=-5> side=short action=open
+margin=False entrust_time=2017-06-02 21:00:00 error=)
+2017-06-02 21:00:00 - INFO  - order FuturesOrder(entrust_id=1566905551 security=TA1709.XZCE mode=OrderAmount<_amount=126> style=MarketOrderStyle<_price_type=-5>
+side=short action=open margin=False entrust_time=2017-06-02 21:00:00 error=) trade price: 4718.0, amount:126, commission: 68.36
+
+2017-06-02 21:00:00 - INFO  - 订单已委托: FuturesOrder(entrust_id=1566905551 security=TA1709.XZCE mode=OrderAmount<_amount=126> style=MarketOrderStyle<_price_type=-5>
+side=short action=open margin=False entrust_time=2017-06-02 21:00:00 error=)
+
+空头平仓成功返回状态
+UserOrder({'order_id': 1566905552, 'security': 'TA1709.XZCE', 'amount': 126, 'filled': 126, 'price': 4762.0, 'status': done, 'add_time': datetime.datetime(2017, 6, 5, 10, 45),
+'side': 'short', 'action': 'close', 'pindex': 0, 'style': MarketOrderStyle<_price_type=-5>})
+
+订单已提交: FuturesOrder(entrust_id=1566905552 security=TA1709.XZCE mode=OrderTargetAmount<_amount=0> style=MarketOrderStyle<_price_type=-5> side=short action=close
+margin=False entrust_time=2017-06-05 10:45:00 error=)
+2017-06-05 10:45:00 - INFO  - order FuturesOrder(entrust_id=1566905552 security=TA1709.XZCE mode=OrderTargetAmount<_amount=0> style=MarketOrderStyle<_price_type=-5>
+side=short action=close margin=False entrust_time=2017-06-05 10:45:00 error=) trade price: 4762.0, amount:126, commission: 6900.14
+
+2017-06-05 10:45:00 - INFO  - 订单已委托: FuturesOrder(entrust_id=1566905552 security=TA1709.XZCE mode=OrderTargetAmount<_amount=0> style=MarketOrderStyle<_price_type=-5>
+side=short action=close margin=False entrust_time=2017-06-05 10:45:00 error=)
+2017-06-05 10:45:00 - WARNING - Order.cash 是一个内部变量, 已经过时, 始终等于 price * filled

@@ -12,6 +12,8 @@
     如果 其他关注 趋势的发展情况
     在盘整时,可能会反转,也可以会继续原来的趋势,要尽量避开 降低仓位
 '''
+import datetime
+
 import requests
 import demjson
 import pandas as pd
@@ -21,6 +23,10 @@ url_season = "http://47.94.198.204:8281/json/data.json"
 url_week = "http://47.94.198.204:8281/json/dataWeek.json"
 url_hour = "http://47.94.198.204:8281/json/dataHour.json"
 
+my_orders_list = ('*', "*")
+dict_key_list = ('品种名称', 'halfy-天系数', 'halfy-幅度系数', 'season-天', 'season-幅度', '2周-天',
+                 '2周-幅度', 'hour-天', 'hour-幅度', '品种机会总描述')
+
 
 def query_taobao_json(url, date_period):
     htmlText = requests.get(url).text
@@ -29,6 +35,23 @@ def query_taobao_json(url, date_period):
     # print(json_life)
     print(type(json_life_two))
     return json_life_two
+    pass
+
+
+def save_data_file(dict_new_result_valid):
+    datenow = datetime.datetime.now().strftime('%Y%m%d');
+    df_excel = pd.DataFrame(dict_new_result_valid, columns=dict_new_result_valid.keys())
+    try:
+        df_excel.to_excel(r'..\..\..\file\calu_life_all_%s.xlsx' % datenow, encoding='utf-8')
+    except Exception as e:
+        df_excel.to_excel(r'..\..\..\file\calu_life_all2_%s.xlsx' % datenow, encoding='utf-8')
+
+    # df = pd.DataFrame(list(dict_m_k_valid.items()), index=range(0, len(dict_m_k_valid)),
+    #                   columns=['name', 'value'])  # 创建一个空的dataframe
+    # # df['next'] = list_next_line
+    # df = df.sort_values(['value'])
+    print("共选出 ", len(dict_new_result_valid.get(dict_key_list[0])))
+    # df.to_csv(r'..\..\..\file\calu_life_all.csv', encoding='utf-8')
     pass
 
 
@@ -59,11 +82,11 @@ def calu_life_weigh(list_week, my_period, current_trend_days, descript):
             print_str += "----反转趋势未确立 很可能只是个小反弹\n"
     elif weigh_scale / weigh_day > 1.5:
         if current_trend_days > 0:
-            print_str += "这是相对暴涨\n"
+            print_str += "这是相对暴涨-后期会变得盘整\n"
         elif current_trend_days < 0:
-            print_str += "这是相对暴跌\n"
+            print_str += "这是相对暴跌-后期会变得盘整\n"
     elif weigh_scale / weigh_day < 0.4:
-        print_str += "这是相对盘整\n"
+        print_str += "这是相对盘整----后期可能会有现趋势暴发行情\n"
 
     if weigh_scale > 0.85 or weigh_day > 0.85:
         if current_trend_days > 0:
@@ -80,8 +103,16 @@ def calu_life_weigh(list_week, my_period, current_trend_days, descript):
     return [my_period, weigh_day, weigh_scale, (weigh_scale + weigh_day) / 2, print_str]
 
 
-def star_sort(dict_half_y_calu, dict_season_calu, dict_week_calu, dict_hour_calu):
+def star_sort(dict_half_y_calu, dict_season_calu, dict_week_calu, dict_hour_calu, dict_half_y):
     '''
+
+    :param dict_half_y_calu:
+    :param dict_season_calu:
+    :param dict_week_calu:
+    :param dict_hour_calu:      保存的
+    :param dict_half_y:         阿里的字典数据  用来取半年周的单边次数
+    :return:
+
     # 依据权重排序  关注点为:::高风险区(可能反转区)和机会区( <0.2
     # 目的 是要找出交易机会  周,月线小于0.2
             month   week  同方向 才加,       不同方向 周反向进入 >0.6时 加
@@ -90,8 +121,12 @@ def star_sort(dict_half_y_calu, dict_season_calu, dict_week_calu, dict_hour_calu
     低
     未明                    趋势不是很明确    不持仓
     '''
-    dict_m_k_valid = {}  # 保存有用的品种信息 组装DF输出文件用
+    dict_new_result_valid = {dict_key_list[0]: [], dict_key_list[1]: [], dict_key_list[2]: [], dict_key_list[3]: [],
+                             dict_key_list[4]: [], dict_key_list[5]: [], dict_key_list[6]: [],
+                             dict_key_list[7]: [], dict_key_list[8]: [], dict_key_list[9]: []}  # 保存有用的品种信息 组装DF输出文件用
     list_next_line = []  # 打印拼接字符串
+    # index = 0 是半年趋势危险系数 1是季度危险系数 2是周趋势进场系数 3 同向 2周趋势危险提醒系数
+    opportunity_danger_coefficient = (0.45, 0.75, 1.4, 0.9)
     for key in dict_season_calu:
         list_next_line.append("\n")
         tuple_halfy = dict_half_y_calu.get(key)  # 时间与幅度的保存的数据
@@ -103,6 +138,7 @@ def star_sort(dict_half_y_calu, dict_season_calu, dict_week_calu, dict_hour_calu
  ['week', 0.05405405405405406, 0.05405405405405406, 0.05405405405405406, 'week\t上涨进入正常趋势区间,关注 进入区间\n单边总次数为 18.5 超过天数次数 0.05405405405405406 超过幅度次数 0.05405405405405406 \n', 4.0]
         '''
         # print(key, tuple_m, "\n", tuple_k, "\n", tuple_h)
+        # -------------------------------------------------------------------
         ###
         day_hour_trend = tuple_hour[5]  ##  现在的方向天数
         day_k_trend = tuple_k[5]  ## 现在的方向天数
@@ -120,65 +156,87 @@ def star_sort(dict_half_y_calu, dict_season_calu, dict_week_calu, dict_hour_calu
 半年周,季度周	危险提示 季度周2周 >0.75 时间+幅度>1.4		危险提示 季度周>0.75 时间+幅度>1.4	
 ,2周,小时	    机会值为 2周,小时 <0.45				        机会值为 2周,小时 >0.75 时间+幅度>1.4     
         '''
-        opportunity_danger_coefficient = (0.45, 0.75, 1.4)  # index = 0 是半年趋势危险系数 1是季度危险系数 2是周趋势进场系数 3 同向 2周趋势危险提醒系数
-
         if tuple_m:
-            str_des_one = ''  # 拼接
+            str_des_one = '只做顺趋势的交易 不做反转 '  # 拼接
             isShow = False  # 是否有进场的机会或者 已经进入高风险区
             if (day_k_trend < 0 and days_m_trend < 0) or (day_k_trend > 0 and days_m_trend > 0):  # 同方向了
-                if tuple_m[2] > + tuple_m[1] > opportunity_danger_coefficient[2] \
+                if tuple_m[2] + tuple_m[1] > opportunity_danger_coefficient[2] \
                         or tuple_m[2] > opportunity_danger_coefficient[1] \
                         or tuple_m[1] > opportunity_danger_coefficient[1]:  # 时间或者幅度
-                    str_des_one = str_des_one + " 关注 季度周高风险区\n"
-                    # isShow = True
-                if tuple_k[2] > + tuple_k[1] < opportunity_danger_coefficient[1] \
-                        or tuple_k[2] < opportunity_danger_coefficient[0] \
-                        or tuple_k[1] < opportunity_danger_coefficient[0]:  # 时间或者幅度
-                    str_des_one = str_des_one + "------------同向 关注 2周 可能可以回调加仓 寻找 进场 机会区\n"
-                if tuple_hour[2] > + tuple_hour[1] < opportunity_danger_coefficient[1] and (
-                        tuple_hour[2] < opportunity_danger_coefficient[0]) and tuple_hour[1] < \
-                        opportunity_danger_coefficient[0]:  # 时间或者幅度
-                    str_des_one = str_des_one + "------------关注 小时区 可能可以回调加仓 寻找 进场 机会区\n"
-                    isShow = True
-                # if tuple_k[2] > + tuple_k[1] > add_danger_coefficient[1] or tuple_k[2] > one_danger_coefficient[1] or \
-                #         tuple_k[1] > one_danger_coefficient[1]:  # 时间或者幅度
-                #     str_des_one = str_des_one + "------------关注 2周高风险区\n"
-                #     isShow = True
-                # if tuple_m[2] < 0.4:  # 时间或者幅度
-                #     str_des_one = str_des_one + " 关注 月寻找进场机会区\n"
-                #     isShow = True
-            else:  # 月与周不同方向   回调或者反转
-                # 不同方向 周反向进入 >0.6时  可以回调考虑加仓
-                if tuple_m[2] > + tuple_m[1] > opportunity_danger_coefficient[2] or tuple_m[2] > \
+                    str_des_one = str_des_one + " 关注同向 季度周高风险区,除非早就上船,否则不做 考虑适当减仓\n"
+                    if tuple_k[2] + tuple_k[1] > opportunity_danger_coefficient[2] \
+                            or (tuple_k[2] > opportunity_danger_coefficient[1]
+                                or tuple_k[1] > opportunity_danger_coefficient[1]):  # 时间或者幅度
+                        str_des_one = str_des_one + "------------同向 关注 2周高风险区 考虑适当减仓\n"
+                else:  # 在 季度周 低风险区
+                    if tuple_k[2] + tuple_k[1] < opportunity_danger_coefficient[1] \
+                            or (tuple_k[2] < opportunity_danger_coefficient[0] and tuple_k[2] > 0 \
+                                and tuple_k[1] < opportunity_danger_coefficient[0]
+                                and tuple_k[1] > 0):  # 2周的 时间或者幅度 在低位区
+                        str_des_one = str_des_one + "------------同向 关注 2周 可能加仓 寻找 进场 机会区\n"
+                        if (day_k_trend < 0 and day_hour_trend < 0) or (
+                                day_k_trend > 0 and day_hour_trend > 0):  # 2周与小时区 都为同向 下跌/上涨
+                            if tuple_hour[2] + tuple_hour[1] < opportunity_danger_coefficient[1] and (
+                                    tuple_hour[2] < opportunity_danger_coefficient[0]) or tuple_hour[1] < \
+                                    opportunity_danger_coefficient[0]:  # 小时区 时间或者幅度 在低位区
+                                str_des_one = str_des_one + "------------关注2周与小时区 都为同向 小时区  可能可以开仓 寻找 进场 机会区\n"
+                                isShow = True
+                        else:  # 小时区与2周趋势相反  2周与季度周相同
+                            if tuple_hour[2] + tuple_hour[1] > opportunity_danger_coefficient[2] or (
+                                    tuple_hour[2] > opportunity_danger_coefficient[1]) or tuple_hour[1] > \
+                                    opportunity_danger_coefficient[1]:  # 小时区 时间或者幅度 在高危区
+                                str_des_one = str_des_one + "------------关注 小时区与其2周趋势相反  可能有回调加仓的机会 寻找 进场 机会区\n"
+                                isShow = True
+            else:  # 月与周不同方向   回调加仓或者减仓
+                # 不同方向 季度周 在高危区时  周反向进入 >0,75时  可以 考虑减仓
+                if tuple_m[2] + tuple_m[1] > opportunity_danger_coefficient[2] or tuple_m[2] > \
                         opportunity_danger_coefficient[1] or \
                         tuple_m[1] > opportunity_danger_coefficient[1]:  # 时间或者幅度
-                    str_des_one = str_des_one + "------------关注 季度周高风险区\n"
-                    # isShow = True
-                if tuple_k[2] > + tuple_k[1] > opportunity_danger_coefficient[2] \
-                        or (tuple_k[2] > opportunity_danger_coefficient[1]
-                             or tuple_k[1] > opportunity_danger_coefficient[1]):  # 时间或者幅度
-                    str_des_one = str_des_one + "------------不同向 关注 2周 可能可以回调加仓 寻找 进场 机会区\n"
-                    isShow = True
-                # if tuple_hour[2] > + tuple_hour[1] < opportunity_danger_coefficient[1] or (
-                #         tuple_hour[2] < opportunity_danger_coefficient[0]) or tuple_hour[1] < \
-                #         opportunity_danger_coefficient[0]:  # 时间或者幅度
-                #     str_des_one = str_des_one + "------------关注 小时区 可能可以回调加仓 寻找 进场 机会区\n"
-                #     isShow = True
-        # else:  # 月度数据太少
-        # str_des_one = str_des_one + " 没有足够月线数据\t"
-        # if tuple_k[2] > 0.8 or tuple_k[1] > 0.8:  # 时间或者幅度
-        #     str_des_one = str_des_one + " 关注 周高风险区\n"
-        #     isShow = True
-        # if tuple_k[2] < 0.4:  # 时间或者幅度
-        #     str_des_one = str_des_one + " 关注 周寻找 进场 机会区\n"
-        #     isShow = True
-        # if tuple_k[2] > tuple_danger_coefficient[1] or tuple_k[1] > tuple_danger_coefficient[1]:  # 时间或者幅度
-        #     str_des_one = str_des_one + " 关注 周高风险区\n"
+                    str_des_one = str_des_one + "------------关注不同向 季度周高风险区,除非早就上船,否则不做反趋势交易 考虑适当减仓\\n"
+                    pass
+                else:  # 不同方向 季度周 不在高危区时  周反向进入 >0,45时  可以回调考虑加仓
+                    if tuple_k[2] + tuple_k[1] > opportunity_danger_coefficient[1] \
+                            or (tuple_k[2] > opportunity_danger_coefficient[0]
+                                or tuple_k[1] > opportunity_danger_coefficient[0]):  # 时间或者幅度
+                        str_des_one = str_des_one + "------------不同向 关注 2周,季度周 可能可以回调加仓 寻找 进场 机会区\n"
+                        if day_hour_trend > 0 and day_k_trend > 0 or (day_hour_trend < 0 and day_k_trend < 0):
+                            # 2周与小时区同向
+                            if tuple_hour[2] + tuple_hour[1] > opportunity_danger_coefficient[1] \
+                                    or (tuple_hour[2] > opportunity_danger_coefficient[0]
+                                        or tuple_hour[1] > opportunity_danger_coefficient[0]):  # 时间或者幅度
+                                isShow = True
+                        else:  # 小时区与2周 方向相反 (与季度周相同)
+                            if tuple_hour[2] + tuple_hour[1] < opportunity_danger_coefficient[2] \
+                                    or (tuple_hour[2] < opportunity_danger_coefficient[1]
+                                        or tuple_hour[1] < opportunity_danger_coefficient[1]):  # 时间或者幅度
+                                isShow = True
+                            pass
+            # if tuple_hour[2] + tuple_hour[1] < opportunity_danger_coefficient[1] or (
+            #         tuple_hour[2] < opportunity_danger_coefficient[0]) or tuple_hour[1] < \
+            #         opportunity_danger_coefficient[0]:  # 时间或者幅度
+            #     str_des_one = str_des_one + "------------关注 小时区 可能可以回调加仓 寻找 进场 机会区\n"
+            #     isShow = True
+        if day_k_trend < 0 and (str(key).__contains__('XSHG') or str(key).__contains__('XSHE')):
+            isShow = False
+        # 已经有仓位的要显示情况
+        for name in my_orders_list:
+            if str(key).__contains__(name):
+                isShow = True
+        # 超过历史0.9的极危险区要显示 不做反转,所以不提示了
+        # if tuple_halfy:
+        #     dict_value_dict_half_y = dict_half_y[str(key).strip()]  # 一个品种的数据
+        #     # 最后的时间是什么时候
+        #     list_halfy_days = dict_value_dict_half_y['days']
+        #     if (tuple_halfy[1] > opportunity_danger_coefficient[3] or tuple_halfy[2] > opportunity_danger_coefficient[
+        #         3]) and len(list_halfy_days) > 12:
+        #         isShow = True
+        # if tuple_m[1] > opportunity_danger_coefficient[3] or tuple_m[2] > opportunity_danger_coefficient[3] \
+        #         or tuple_k[1] > opportunity_danger_coefficient[3] or tuple_k[2] > opportunity_danger_coefficient[3]:
         #     isShow = True
         if isShow:
             #### 半年周 只参与警报,不参与 机会
             if tuple_halfy:
-                if tuple_halfy[2] > + tuple_halfy[1] > opportunity_danger_coefficient[2] or tuple_halfy[2] > \
+                if tuple_halfy[2]  + tuple_halfy[1] > opportunity_danger_coefficient[2] or tuple_halfy[2] > \
                         opportunity_danger_coefficient[1] or \
                         tuple_halfy[1] > opportunity_danger_coefficient[1]:
                     str_des_one = str_des_one + "------------关注 半年期高风险区\n"
@@ -191,16 +249,21 @@ def star_sort(dict_half_y_calu, dict_season_calu, dict_week_calu, dict_hour_calu
             str_des_one = str_des_one + tuple_k[4]
             str_des_one += tuple_hour[4] + "\n\n"
             print(key, str_des_one, "\n")
-            dict_m_k_valid[key] = (str_des_one)
+            # ----------------------------
+            dict_new_result_valid[dict_key_list[0]].append(str(key).strip())
+            dict_new_result_valid[dict_key_list[1]].append('%.3f' % tuple_halfy[1])
+            dict_new_result_valid[dict_key_list[2]].append('%.3f' % tuple_halfy[2])
+            dict_new_result_valid[dict_key_list[3]].append('%.3f' % tuple_m[1])
+            dict_new_result_valid[dict_key_list[4]].append('%.3f' % tuple_m[2])
+            dict_new_result_valid[dict_key_list[5]].append('%.3f' % tuple_k[1])
+            dict_new_result_valid[dict_key_list[6]].append('%.3f' % tuple_k[2])
+            dict_new_result_valid[dict_key_list[7]].append('%.3f' % tuple_hour[1])
+            dict_new_result_valid[dict_key_list[8]].append('%.3f' % tuple_hour[2])
+            dict_new_result_valid[dict_key_list[9]].append(str_des_one)
         else:
             print(key, "没有机会")
-    ###########
-    df = pd.DataFrame(list(dict_m_k_valid.items()), index=range(0, len(dict_m_k_valid)),
-                      columns=['name', 'value'])  # 创建一个空的dataframe
-    # df['next'] = list_next_line
-    df = df.sort_values(['value'])
-    print("共选出 ", len(dict_m_k_valid))
-    df.to_csv(r'..\..\..\file\calu_life_all.csv', encoding='utf-8')
+    ###########  保存筛选结果到文件
+    save_data_file(dict_new_result_valid)
     pass
 
 
@@ -214,6 +277,7 @@ def sort_life():
     dict_season = query_taobao_json(url_season, "season")  # 取得趋势区间文件
     dict_week = query_taobao_json(url_week, "week")
     dict_hour = query_taobao_json(url_hour, "hour")
+    print(dict_hour.keys(), "共 %s 个品种" % len(dict_hour.keys()))
     # df = pd.DataFrame(columns=["name", "month", "week", "avg_m_w","des_m","des_w"])  # 创建一个空的dataframe
     dict_week_calu = {}  # 时间与幅度的保存的数据
     dict_season_calu = {}
@@ -305,7 +369,7 @@ def sort_life():
 
     # print(dict_week_calu, "\n")
     # print(dict_month_calu)
-    star_sort(dict_half_y_calu, dict_season_calu, dict_week_calu, dict_hour_calu)
+    star_sort(dict_half_y_calu, dict_season_calu, dict_week_calu, dict_hour_calu, dict_half_y)
     # print(df)
     pass
 

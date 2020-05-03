@@ -8,18 +8,18 @@
 if __name__ == '__main__':
     import jqsdk
     params = {
-        'token':'8add836db38a3450ccbf0d5653f90f8b',
-        'algorithmId':7,
-        'baseCapital':20000,#初始资金
+        'token':'70e4aef3dcac5cba0c1f6e652504d84a',
+        'algorithmId':5,
+        'baseCapital':200000,#初始资金
         'frequency':'day',#运行频率
         'startTime':'2017-06-01',
         'endTime':'2019-08-01',
-        'name':"Test1",
+        'name':"halloween1",
     }
     jqsdk.run(params)
 
 # 导入聚宽函数库
-import jqdata
+import jqdatadir
 
 # 初始化此策略
 def initialize(context):

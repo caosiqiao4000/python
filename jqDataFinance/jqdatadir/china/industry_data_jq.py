@@ -5,7 +5,7 @@ from jqdatasdk import *  # 平台给的包，务必加载，地址：https://git
 from jqDataFinance.jqdata.china.common.jqDataLogin import login
 from jqDataFinance.jqdata.china.common.handJqDataToFile import *
 # from scrapy.spider import BaseSpider
-# from jqdata import macro
+# from jqdatadir import macro
 import pandas as pd
 import numpy as np
 

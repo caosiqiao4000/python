@@ -80,4 +80,12 @@ def testThree():
     df2[df2>0] = -df2
     print(df2)
 
-testThree()
+def test_four():
+    my_orders_list = ('豆一',"")
+    key = '豆一'
+    print(key in my_orders_list)
+    for name in my_orders_list:
+        print(name)
+    pass
+
+test_four()

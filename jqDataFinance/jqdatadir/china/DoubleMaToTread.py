@@ -1,7 +1,7 @@
 '''
 双均线策略，当五日均线位于十日均线上方则买入，反之卖出。
 '''
-import jqdata
+import jqdatadir
 import datetime
 
 from jqdatasdk import *  # 平台给的包，务必加载，地址：https://github.com/JoinQuant/jqdatasdk/archive/master.zip

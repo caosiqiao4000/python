@@ -19,7 +19,7 @@ if __name__ == '__main__':
     jqsdk.run(params)
 
 # 导入聚宽函数库
-import jqdata
+import jqdatadir
 
 # 初始化程序, 整个回测只运行一次
 def initialize(context):

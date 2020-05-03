@@ -17,8 +17,9 @@ if __name__ == '__main__':
         'name':"Test1",
     }
     jqsdk.run(params)
+
 # 导入聚宽函数库
-import jqdata
+import jqdatadir
 
 # 初始化函数，设定要操作的股票、基准等等
 def initialize(context):

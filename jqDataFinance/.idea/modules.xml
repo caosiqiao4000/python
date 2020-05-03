@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/jqDataFinance.iml" filepath="$PROJECT_DIR$/jqDataFinance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../python/pornhub/.idea/pornhub.iml" filepath="$PROJECT_DIR$/../../python/pornhub/.idea/pornhub.iml" />
     </modules>
   </component>
 </project>
