@@ -10,7 +10,7 @@ def login():
 
 
 
-login()
+# login()
 is_auth = is_auth()
 print(is_auth)
 # 查询当日剩余可调用数据条数

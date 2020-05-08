@@ -11,7 +11,7 @@ login()
 
 no_check_value = ("399001.XSHE", "399006.XSHE", "800000.XHKG", '000016.XSHE')
 
-
+## 取得指定的股票的相应的聚宽价格年月日数据
 def getDataByCode(stockCode, stockName, monthNumBar=800, numBar=100000):
     stockCodeMarket = stockCode;
     if len(stockCode) < 8:
@@ -45,33 +45,38 @@ def fetch_index_mult():
     '399980.XSHE': '中证超级大盘指数', 20190719 有个数据错误
     :return:
     '''
-    dict_stock_index = {"000001.XSHG": "上证指数", '000819.XSHG': '有色金属', '000300.XSHG': '沪深300', '000905.XSHG': '中证500',
-                        '000992.XSHG': '全指金融', '399975.XSHE': '中证全指证券指数', "399978.XSHE": '中证医药100指数',
-                        '399979.XSHE': '中证大宗商品股票指数',
-                         '399986.XSHE': '中证银行指数', '399987.XSHE': '中证酒指数',
-                        '399952.XSHE': '沪深300地产指数',
-                        '399990.XSHE': '中证煤炭等权指数', '399997.XSHE': '中证白酒指数', '399971.XSHE': '中证传媒指数',
-                        '399805.XSHE': '中证互联网金融指数',
-                        '399980.XSHE': '中证超级大盘指数',
-                        '399812.XSHE': '中证养老产业指数', '399813.XSHE': '中证国防安全指数', '399814.XSHE': '中证大农业指数',
-                        '000015.XSHG': '红利指数'}
+    dict_stock_index = {"000001.XSHG": "上证指数", '000905.XSHG': '中证500', '000300.XSHG': '沪深300'}
     for code, name in dict_stock_index.items():
         getIndexDataByCodeToFile(code, name, path="D:\\\\ideaWorkspace\\python\\jqJson\\")
     pass
 
 
 def start_fetch():
-    workbook = xlrd.open_workbook("..\\..\\..\\file\\20190522stock_base_info.xlsx")
+    # workbook = xlrd.open_workbook("..\\..\\..\\file\\20190522stock_base_info.xlsx")
+    workbook = xlrd.open_workbook("..\\..\\..\\file\\stock_base_info20200503.xlsx")
     sheet_names = workbook.sheet_by_index(0)
-    for i in range(1, 35):
+    for i in range(1, 105):
         list = sheet_names.cell_value(i, 1);
         list2 = sheet_names.cell_value(i, 0);
         newStockCode = str(list).replace(".0", "")
+        # print(newStockCode,list2)
         getDataByCode(newStockCode, list2)
-    getDataByCode("002415.XSHE", "海康威视")
     getDataByCode("000016.XSHE", "上证50")
     getDataByCode("399001.XSHE", "深证指数")
     getDataByCode("399006.XSHE", "创业指数")
+    getDataByCode("002032", "苏泊尔")
+    getDataByCode("000333", "美的集团")
+    getDataByCode("002304", "洋河股份")
+    getDataByCode("603899", "晨光文具")
+    getDataByCode("600276", "恒瑞医药")
+    getDataByCode("300357", "我武生物")
+    getDataByCode("601888", "中国国旅")
+    getDataByCode("600036", "招商银行")
+    getDataByCode("002714", "牧原股份")
+    getDataByCode("300602", "飞荣达")
+    getDataByCode("000651", "格力电器")
+    getDataByCode("300750", "宁德时代")
+    getDataByCode("300676", "华大基因")
     fetch_index_mult()
 
 

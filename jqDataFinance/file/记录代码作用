@@ -1,0 +1,7 @@
+
+20200504
+给本地数据库删除一些不符合条件的数据和给股票查询出相应的行业代码
+D:\ideaWorkspace\csqGithub_python\jqDataFinance\jqdatadir\db\mysql_handle.py
+
+取得指定的股票的相应的聚宽价格年月日数据
+D:\ideaWorkspace\csqGithub_python\jqDataFinance\jqdatadir\china\fetch_data\FetchChinaMarketByJq.py

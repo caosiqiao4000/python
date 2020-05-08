@@ -36,18 +36,23 @@ def readCsv():
                 # test2(bb_stu[1])
                 # getDataByCodeToFile(bb_stu[2], bb_stu[0], path=json_path)
                 # 获取某一天的主力合约对应的期货合约代码，指定日期为'2018-05-06'
-                index_code_jx = bb_stu[1].replace('9999.XINE', '')
-                index_code_jx = index_code_jx.replace('9999.XSGE', '')
-                index_code_jx = index_code_jx.replace('9999.XZCE', '')
-                index_code_jx = index_code_jx.replace('9999.XDCE', '')
-                index_code_jx = index_code_jx.replace('8888.XINE', '')
-                index_code_jx = index_code_jx.replace('8888.XSGE', '')
-                index_code_jx = index_code_jx.replace('8888.XZCE', '')
-                index_code_jx = index_code_jx.replace('8888.XDCE', '')
+                index_code_jx = bb_stu[1].replace(" ","")
+                # index_code_jx = bb_stu[1].replace('9999.XINE', '')
+                # index_code_jx = index_code_jx.replace('9999.XSGE', '')
+                # index_code_jx = index_code_jx.replace('9999.XZCE', '')
+                # index_code_jx = index_code_jx.replace('9999.XDCE', '')
+                # index_code_jx = index_code_jx.replace('8888.XINE', '')
+                # index_code_jx = index_code_jx.replace('8888.XSGE', '')
+                # index_code_jx = index_code_jx.replace('8888.XZCE', '')
+                # index_code_jx = index_code_jx.replace('8888.XDCE', '')
                 # 获取某一天的主力合约对应的期货合约代码，指定日期为'2018-05-06'
-                mainFuturnBySiglin = get_dominant_future(index_code_jx)
-                if mainFuturnBySiglin:
-                    getDataByCodeToFile(mainFuturnBySiglin, bb_stu[0], path=json_path)
+                # mainFuturnBySiglin = get_dominant_future(index_code_jx)
+                # if mainFuturnBySiglin:
+                try:
+                    getDataByCodeToFile(index_code_jx, bb_stu[0], path=json_path)
+                except:
+                    print(index_code_jx, "  is error ", )
+                    pass
 
 
 # def test1():
@@ -108,5 +113,10 @@ def start_fetch():
     # addOne("000016.XSHG", "上证50")
     # add_shang_hai_50("000016.XSHG", "上证50")
 
+
 if __name__ == '__main__':
     start_fetch()
+    # 获取指定时间周期为5m的期权行情数据
+    # datenow = datetime.datetime.now().strftime('%Y-%m-%d');
+    # df = get_bars('AG9999.XSGE', 100000, '1d', fields=['date', 'open', 'high', 'low', 'close', 'volume'], include_now=True, fq_ref_date=datenow, end_dt=datenow)
+    # print(df)

@@ -12,6 +12,7 @@ login()
 datenow = datetime.datetime.now().strftime('%Y-%m-%d');
 
 # 打开数据库连接
+
 db = pymysql.connect("localhost", "root", "root", "cfpdb")
 
 # 使用 cursor() 方法创建一个游标对象 cursor
