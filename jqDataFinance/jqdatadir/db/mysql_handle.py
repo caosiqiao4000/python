@@ -70,7 +70,7 @@ def handle_jqdata(stockCode, stockName):
         valuation.code == stockCodeMarket
     ))
     try:
-        if df['market_cap'][0] < 120:
+        if df['market_cap'][0] < 50:
             # 取出总市值
             print(stockCodeMarket, stockName, " 总市值 ", df['market_cap'][0])
             return False, stockName

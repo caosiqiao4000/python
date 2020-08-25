@@ -9,7 +9,8 @@ import logging as log
 
 login()
 
-no_check_value = ("399001.XSHE", "399006.XSHE", "800000.XHKG", '000016.XSHE')
+no_check_value = ("399001.XSHE", "399006.XSHE", "800000.XHKG", '000016.XSHE', "000001.XSHG", "000905.XSHG", "000300.XSHG")
+
 
 ## 取得指定的股票的相应的聚宽价格年月日数据
 def getDataByCode(stockCode, stockName, monthNumBar=800, numBar=100000):
@@ -27,9 +28,9 @@ def getDataByCode(stockCode, stockName, monthNumBar=800, numBar=100000):
     ))
     # print(stockCodeMarket,stockName)
     try:
-        if stockCodeMarket not in no_check_value and df['market_cap'][0] < 120:
+        if stockCodeMarket not in no_check_value and df['market_cap'][0] < 50:
             # 取出总市值
-            print(stockCodeMarket, stockName, " 总市值不到120亿 ", df['market_cap'][0])
+            print(stockCodeMarket, stockName, " 总市值不到50亿 ", df['market_cap'][0])
             return
         # print(i, str(list).replace(".0", ""), list2 ,d_industry.get(stockCodeMarket).get("zjw"))
         getDataByCodeToFile(stockCodeMarket, stockName, path="D:\\\\ideaWorkspace\\python\\jqJson\\")
@@ -45,10 +46,6 @@ def fetch_index_mult():
     '399980.XSHE': '中证超级大盘指数', 20190719 有个数据错误
     :return:
     '''
-    dict_stock_index = {"000001.XSHG": "上证指数", '000905.XSHG': '中证500', '000300.XSHG': '沪深300'}
-    for code, name in dict_stock_index.items():
-        getIndexDataByCodeToFile(code, name, path="D:\\\\ideaWorkspace\\python\\jqJson\\")
-    pass
 
 
 def start_fetch():
@@ -62,8 +59,13 @@ def start_fetch():
         # print(newStockCode,list2)
         getDataByCode(newStockCode, list2)
     getDataByCode("000016.XSHE", "上证50")
+    getDataByCode("510050.XSHE", "上证50ETF")
     getDataByCode("399001.XSHE", "深证指数")
     getDataByCode("399006.XSHE", "创业指数")
+    getDataByCode("000001.XSHG", "上证指数")
+    getDataByCode("000300.XSHG", "沪深300")
+    getDataByCode("000905.XSHG", "中证500")
+
     getDataByCode("002032", "苏泊尔")
     getDataByCode("000333", "美的集团")
     getDataByCode("002304", "洋河股份")
@@ -73,11 +75,13 @@ def start_fetch():
     getDataByCode("601888", "中国国旅")
     getDataByCode("600036", "招商银行")
     getDataByCode("002714", "牧原股份")
-    getDataByCode("300602", "飞荣达")
+
     getDataByCode("000651", "格力电器")
     getDataByCode("300750", "宁德时代")
     getDataByCode("300676", "华大基因")
-    fetch_index_mult()
+    getDataByCode("601988", "中国银行")
+
+    
 
 
 # print(get_all_securities(types=['index'], date=None))

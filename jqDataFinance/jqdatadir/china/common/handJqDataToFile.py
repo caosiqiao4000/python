@@ -67,7 +67,6 @@ def getDataByCodeToFile(stockCodeMarket, stockName, monthNumBar=800, numBar=1000
     df2.to_csv(
         path + stockCodeMarket + "_" + stockName + "month.csv")
 
-
 def getIndexDataByCodeToFile(stockCodeMarket, stockName, path=my_path):
     # panel = get_price(['000001.XSHG', '000819.XSHG', '000300.XSHG'], start_date=startdate_str, end_date=datenow,
     #     #                   frequency='5d', fields=['open', 'close'],
@@ -86,15 +85,15 @@ def getIndexDataByCodeToFile(stockCodeMarket, stockName, path=my_path):
     df0.to_csv(
         path + stockCodeMarket + "_" + stockName + "day.csv")
     # ---------------------------------------------------------------------------hour
-    df1 = get_price(stockCodeMarket, start_date=date_hour_start, end_date=datenow,
-                    frequency='60m', fields=field_params_index,
-                    skip_paused=True, fq='pre')
-    df1.insert(0, 'date', df1.index)
-    print(df1.head(1))
-    print(df1.tail(1))
-    df1.loc[:, "trend"] = df1.loc[:, 'close'] - df1.loc[:, 'open']  # 用来判断一天上涨还是下跌
-    df1.to_csv(
-        path + stockCodeMarket + "_" + stockName + "hour.csv")
+    # df1 = get_price(stockCodeMarket, start_date=date_hour_start, end_date=datenow,
+    #                 frequency='60m', fields=field_params_index,
+    #                 skip_paused=True, fq='pre')
+    # df1.insert(0, 'date', df1.index)
+    # print(df1.head(1))
+    # print(df1.tail(1))
+    # df1.loc[:, "trend"] = df1.loc[:, 'close'] - df1.loc[:, 'open']  # 用来判断一天上涨还是下跌
+    # df1.to_csv(
+    #     path + stockCodeMarket + "_" + stockName + "hour.csv")
     # ---------------------------------------------------------------------------week
     df2 = get_price(stockCodeMarket, start_date=start_date_str, end_date=datenow,
                     frequency='5d', fields=field_params_index,
